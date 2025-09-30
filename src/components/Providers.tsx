@@ -75,23 +75,13 @@ function useUpW3KOnStat(
 ) {
   const ref = useRef(connected)
   useEffect(() => {
-    if (!ref.current && connected) {
-      if (address) {
-        useWeb3Kit.setState({ conectType: type, address })
-      } else {
-        return () => { }
-      }
-    }
     if (ref.current && !connected) {
       clearWeb3Kit()
     }
-    if (connected && address && !useWeb3Kit.getState().conectType) {
-      useWeb3Kit.setState({ conectType: type, address })
+    if (connected && address && !useWeb3Kit.getState().conectType && chainId) {
+      useWeb3Kit.setState({ conectType: type, address, chainId })
+      ref.current = connected
     }
-    if (connected && useWeb3Kit.getState().chainId !== chainId) {
-      useWeb3Kit.setState({ chainId })
-    }
-    ref.current = connected
   }, [address, connected, chainId])
 }
 function OnWalletStats() {
@@ -125,12 +115,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <RainbowKitProvider theme={darkTheme()} modalSize="compact" locale="en">
           <TronWalletProvider disableAutoConnectOnLoad adapters={adapters}>
             <TronWalletModalProvider>
-                <SolWalletProvider wallets={solWallets} autoConnect>
-                  <SolWalletModalProvider>
-                    <OnWalletStats />
-                    {children}
-                  </SolWalletModalProvider>
-                </SolWalletProvider>
+              <SolWalletProvider wallets={solWallets} autoConnect>
+                <SolWalletModalProvider>
+                  <OnWalletStats />
+                  {children}
+                </SolWalletModalProvider>
+              </SolWalletProvider>
             </TronWalletModalProvider>
           </TronWalletProvider>
         </RainbowKitProvider>

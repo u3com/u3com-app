@@ -66,6 +66,7 @@ export function ConnectBtn() {
       } else if (w3k.conectType == 'solana') {
         await solKit.disconnect()
       }
+      clearWeb3Kit()
       setOpenAcc(false)
     },
   })
@@ -86,7 +87,6 @@ export function ConnectBtn() {
         solM.setVisible(true)
         break
     }
-    useWeb3Kit.setState({ chainId })
     upLocalStorage(LocalKeys[chainType], chainId)
     setOpen(false)
   }
